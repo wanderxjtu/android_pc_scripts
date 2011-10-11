@@ -30,7 +30,7 @@ Having Label=\"Hello World!\", Version=\"1.21\" creates \"Hello World! 1.21.apk\
   fi
   
   o=$2
-  [ "$2" = "" ] && o=.
+  [ "$2" = "" ] && o=`dirname $1`
 
   label=`aapt d badging "$1"|grep "application: label="|cut -d\' -f2-|rev|cut -d\' -f4-|rev`  #|tr -dc [A-Za-z0-9-_.!\'~+[:blank:]]`
 
