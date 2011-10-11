@@ -1,0 +1,14 @@
+#!/bin/bash
+# APK Batch Rename Tool V1.10 Linux
+# moded by wanderxjtu (wanderhuang@gmail.com) - 2011-10-11
+input="$1"
+[ $input = "" ] && input="input"
+echo APK Batch Rename Tool V1.10 Linux
+echo
+echo Starting to copy files...
+echo
+find $input -name '*.apk' -type f -exec `dirname $0`/apkrename -rename {} \;
+echo
+echo Completed. Now check output directory.
+echo
+

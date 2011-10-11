@@ -1,0 +1,53 @@
+#!/bin/bash
+# ApkRename - V1.10 Linux - PhSorx (phsorx@gmail.com) - 11-17-2010
+# moded by wanderxjtu (wanderhuang@gmail.com) - 2011-10-11
+label=
+version=
+
+[ "$1" = "" ] &&
+{
+
+echo """
+ApkRename - V1.10 Linux - PhSorx (phsorx@gmail.com) - 11-17-2010
+
+    apkrename [-rename] [path/]infile [output-folder]
+
+ApkRename takes Label and Version info from an Android Package (.apk) file
+and creates a copy with it under output-folder or current folder if omitted.
+
+Eg: apkrename.exe com.example.hw.apk
+Having Label=\"Hello World!\", Version=\"1.21\" creates \"Hello World! 1.21.apk\"
+"""
+
+}||{
+  if [[ "$1" = "-rename" ]]; then
+	echo "$0: Rename mode, output directory will be ignored"
+	cmd="mv"
+	shift
+  else
+	echo "$0: Copy mode"
+	cmd="cp"
+  fi
+  
+  o=$2
+  [ "$2" = "" ] && o=.
+
+  label=`aapt d badging "$1"|grep "application: label="|cut -d\' -f2-|rev|cut -d\' -f4-|rev`  #|tr -dc [A-Za-z0-9-_.!\'~+[:blank:]]`
+
+  [ "$label" = "" ] &&
+    label=`aapt d badging "$1"|grep "launchable activity name="|cut -d\' -f4-|rev|cut -d\' -f4-|rev` #|tr -dc [A-Za-z0-9-_.!\'~+[:blank:]]`
+
+  [ "$label" = "" ] &&
+    label=Unknown
+
+  version=`aapt d badging "$1"|grep "versionName="|cut -d\' -f6`
+
+  [ "$version" = "" ] &&
+    version=0.0.0
+
+  echo $label $version
+
+  $cmd "$1" "$o/$label $version.apk"
+
+}
+
